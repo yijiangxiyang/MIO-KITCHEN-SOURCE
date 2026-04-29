@@ -25,6 +25,10 @@ from functools import wraps
 from random import randrange
 from tkinter.ttk import Scrollbar
 from typing import Optional, Any
+
+from src.core.pygpt.gpt_reader import GPTReader
+from src.core.splash_editor.main import splash_repack
+from src.core.splash_editor.src.logo_gen_decoder import process_splashimg
 from src.core import merge_sparse
 from src.core import tarsafe, miside_banner
 from src.core.Magisk import Magisk_patch
@@ -6050,6 +6054,8 @@ class PackPartition(Toplevel):
                 repack_boot(i)
             elif parts_dict[i] == 'dtbo':
                 pack_dtbo()
+            elif parts_dict[i] == 'splash':
+                splash_repack(os.path.join(work, dname), os.path.join(work, f"{dname}.img"))
             elif parts_dict[i] == 'logo':
                 logo_pack()
             elif parts_dict[i] == 'guoke_logo':
@@ -6517,6 +6523,25 @@ def unpack(chose: list | dict, form: str = '') -> bool:
                 call(['afptool', 'unpack', f"{project_manger.current_work_path()}/{i}.img", work])
             if file_type == 'guoke_logo':
                 GuoKeLogo().unpack(os.path.join(project_manger.current_work_path(), f'{i}.img'), f'{work}/{i}')
+            if file_type == 'splash':
+                if not os.path.exists(splash_out_dir:=os.path.join(work, i)):
+                    os.makedirs(splash_out_dir, True)
+                process_splashimg(os.path.join(project_manger.current_work_path(), f'{i}.img'), f"{work}/{i}/splash.png")
+            if file_type == 'gpt':
+                reader = GPTReader(os.path.join(project_manger.current_work_path(), f'{i}.img'), sector_size=512)
+                for partition in reader.partition_table.valid_entries():
+                    print('guid/type={} first-block={} size={} name={}'.format(
+                        partition.partition_type, partition.first_block, partition.length, partition.name))
+                    if True:
+                        file_base_name = partition.name if partition.name else str(partition.partition_id)
+
+                        out_file = os.path.join(work, f'{file_base_name}.img')
+                        print(f'Writing partition to file {out_file}')
+
+                        with open(out_file, 'wb+') as fout:
+                            for block in reader.block_reader.blocks_in_range(partition.first_block, partition.length):
+                                fout.write(block)
+
             if file_type == "erofs":
                 if call(exe=['extract.erofs', '-i', os.path.join(project_manger.current_work_path(), f'{i}.img'), '-o',
                              work,
