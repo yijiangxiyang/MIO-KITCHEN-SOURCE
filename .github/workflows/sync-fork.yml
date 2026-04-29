@@ -1,0 +1,29 @@
+name: Sync Fork
+
+on:
+  schedule:
+    # 每天 UTC 时间 0 点运行（可自行修改 cron 表达式）
+    - cron: '0 0 * * *'
+  workflow_dispatch:  # 允许手动触发
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Add upstream remote
+        run: |
+          git remote add upstream https://github.com/ColdWindScholar/MIO-KITCHEN-SOURCE.git
+          git fetch upstream
+
+      - name: Merge upstream changes
+        run: |
+          git checkout main  # 如果你的默认分支是 master，改为 master
+          git merge upstream/main --no-edit
+
+      - name: Push to fork
+        run: |
+          git push origin main
