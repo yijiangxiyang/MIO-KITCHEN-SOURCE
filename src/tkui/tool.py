@@ -410,7 +410,7 @@ class CustomControls:
         ttk.Label(ft, text=text, width=15, font=(None, 12)).pack(side='left', padx=10, pady=10)
         ttk.Entry(ft, textvariable=textvariable).pack(side='left', padx=5, pady=5)
         # Use a lambda to decide whether to ask for a file or directory.
-        ttk.Button(ft, text=lang.text28,  # Assuming lang.text28 is 'Browse' or similar
+        ttk.Button(ft, text=lang.browse,  # Assuming lang.browse is 'Browse' or similar
                    command=lambda: textvariable.set(
                        filedialog.askopenfilename() if not is_folder else filedialog.askdirectory())).pack(side='left',
                                                                                                            padx=10,
@@ -728,7 +728,7 @@ class ToolBox(ttk.Frame):
             ttk.Label(ft_boot, text=lang.boot_file, width=12).pack(side='left', padx=(0, 5),
                                                                    pady=5)  # Standardized label width.
             ttk.Entry(ft_boot, textvariable=self.boot_file).pack(side='left', padx=5, pady=5, expand=True, fill='x')
-            ttk.Button(ft_boot, text=lang.text28,  # Assuming lang.text28 is 'Browse' or similar.
+            ttk.Button(ft_boot, text=lang.browse,  # Assuming lang.browse is 'Browse' or similar.
                        command=lambda: self.boot_file.set(
                            filedialog.askopenfilename(title="Select Boot Image",
                                                       filetypes=(("Image files", "*.img *.bin"),
@@ -741,7 +741,7 @@ class ToolBox(ttk.Frame):
             ttk.Label(ft_apk, text=lang.magisk_apk, width=12).pack(side='left', padx=(0, 5),
                                                                    pady=5)  # Standardized label width.
             ttk.Entry(ft_apk, textvariable=self.magisk_apk).pack(side='left', padx=5, pady=5, expand=True, fill=X)
-            ttk.Button(ft_apk, text=lang.text28,  # Assuming lang.text28 is 'Browse'.
+            ttk.Button(ft_apk, text=lang.browse,  # Assuming lang.browse is 'Browse'.
                        command=self.chose_file_refresh).pack(side='left', padx=(5, 0), pady=5)  # No lambda needed here.
 
             # Architecture selection section
@@ -797,7 +797,7 @@ class ToolBox(ttk.Frame):
             ttk.Label(f, text=lang.log_file).pack(side=LEFT, fill=X, padx=5, pady=5)
             ttk.Entry(f, textvariable=self.choose_file).pack(side=LEFT, fill=X, padx=5, pady=5)
             ttk.Button(f, text=lang.choose, command=lambda: self.choose_file.set(
-                filedialog.askopenfilename(title=lang.text25, filetypes=(
+                filedialog.askopenfilename(title=lang.select_plugin, filetypes=(
                     ('Log File', "*.log"), ('Log File', "*.txt")))) == self.lift()).pack(side=LEFT,
                                                                                          fill=X, padx=5,
                                                                                          pady=5)
@@ -872,8 +872,8 @@ class ToolBox(ttk.Frame):
             self.f_.pack(side='left', padx=5)
 
             # Close button
-            ttk.Button(self, text=lang.text17, command=self.destroy).pack(fill=X, padx=5,
-                                                                          pady=5)  # lang.text17 = 'Close' (example)
+            ttk.Button(self, text=lang.close, command=self.destroy).pack(fill=X, padx=5,
+                                                                          pady=5)  # lang.close = 'Close' (example)
 
         def calc_forward(self, event=None):
             """Calculates the value from left to right (from the left field to the right field)."""
@@ -1039,7 +1039,7 @@ class ToolBox(ttk.Frame):
             self.path_edit = ttk.Entry(f, textvariable=self.choose_file)
             self.path_edit.pack(side=LEFT, fill=X, padx=5, pady=5, expand=True)
             self.choose_button = ttk.Button(f, text=lang.choose, command=lambda: self.choose_file.set(
-                filedialog.askopenfilename(title=lang.text25)) == self.lift())
+                filedialog.askopenfilename(title=lang.select_plugin)) == self.lift())
             self.choose_button.pack(side=LEFT, fill=X, padx=5, pady=5)
             f.pack(padx=5, pady=5, anchor='nw', fill=X)
             self.button = ttk.Button(self, text=lang.text22, command=self.run, style='Accent.TButton')
@@ -1579,7 +1579,7 @@ class Tool(Tk):
     def get_frame(self, title):
         frame = ttk.LabelFrame(self.frame_bg, text=title)
         frame.pack(padx=10, pady=10)
-        ttk.Button(frame, text=lang.text17, command=frame.destroy).pack(anchor="ne", padx=5, pady=5)
+        ttk.Button(frame, text=lang.close, command=frame.destroy).pack(anchor="ne", padx=5, pady=5)
         self.update_frame()
         self.scrollbar.config(command=self.canvas1.yview)
         return frame
@@ -1611,12 +1611,12 @@ class Tool(Tk):
         self.tab6 = ttk.Frame(self.notepad)
         self.tab7 = ttk.Frame(self.notepad)
         # if not is_pro:
-        #     self.notepad.add(self.tab, text=lang.text11)
-        self.notepad.add(self.tab2, text=lang.text12)
-        self.notepad.add(self.tab7, text=lang.text19)
+        #     self.notepad.add(self.tab, text=lang.home)
+        self.notepad.add(self.tab2, text=lang.project)
+        self.notepad.add(self.tab7, text=lang.plugin)
         self.notepad.add(self.tab3, text=lang.text13)
-        self.notepad.add(self.tab4, text=lang.text14)
-        self.notepad.add(self.tab5, text=lang.text15)
+        self.notepad.add(self.tab4, text=lang.about)
+        self.notepad.add(self.tab5, text=lang.tasks)
         self.notepad.add(self.tab6, text=lang.toolbox)
         self.scrollbar = ttk.Scrollbar(self.tab5, orient=tk.VERTICAL)
         self.scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
@@ -1931,7 +1931,7 @@ class Updater(Toplevel):
                     self.update_process()
                 except (Exception, BaseException):
                     self.notice.configure(text=lang.t44, foreground='red')
-                    self.update_button.configure(state='normal', text=lang.text37)
+                    self.update_button.configure(state='normal', text=lang.retry)
                     self.progressbar.stop()
                     logging.exception("Upgrade")
                     return
@@ -1944,7 +1944,7 @@ class Updater(Toplevel):
                 self.progressbar.stop()
             else:
                 self.notice.configure(text=lang.t44, foreground='red')
-                self.update_button.configure(state='normal', text=lang.text37)
+                self.update_button.configure(state='normal', text=lang.retry)
                 self.progressbar['value'] = 0
                 self.progressbar.stop()
             return
@@ -1955,7 +1955,7 @@ class Updater(Toplevel):
         except (Exception, BaseException) as e:
             if states.update_window:
                 self.notice.configure(text=lang.t46, foreground='red')
-                self.update_button.configure(state='normal', text=lang.text37)
+                self.update_button.configure(state='normal', text=lang.retry)
                 self.change_log.insert('insert', e)
             return
         if not states.update_window:
@@ -1969,7 +1969,7 @@ class Updater(Toplevel):
 
         if new_version is None:
             self.notice.configure(text=lang.t46, foreground='red')
-            self.update_button.configure(state='normal', text=lang.text37)
+            self.update_button.configure(state='normal', text=lang.retry)
             self.change_log.insert('insert', url.text)
             return
 
@@ -1979,7 +1979,7 @@ class Updater(Toplevel):
             self.change_log.insert('insert', json_.get('body'))
             self.update_assets = json_.get('assets')
             self.get_download_url()
-            self.update_button.configure(text=lang.text37 if not self.update_download_url else lang.t40)
+            self.update_button.configure(text=lang.retry if not self.update_download_url else lang.t40)
         else:
             self.notice.configure(text=lang.t49, foreground='green')
             self.change_log.insert('insert', json_.get('body'))
@@ -2104,7 +2104,7 @@ class Updater(Toplevel):
 
         else:
             self.notice.configure(text=lang.t41, foreground='red')
-            self.update_button.configure(state='normal', text=lang.text37)
+            self.update_button.configure(state='normal', text=lang.retry)
             settings.set_value('version', settings.version_old)
             settings.set_value('updating', "false")
 
@@ -2432,6 +2432,7 @@ class SetUtils:
         self.set_file = set_ini or os.path.join(cwd_path, "bin", "setting.ini")
         self.plugin_repo = None
         self.contextpatch = '0'
+        self.tmp_context_patch = '0'
         self.oobe = '0'
         self.path = None
         self.bar_level = '0.9'
@@ -2556,12 +2557,12 @@ def un_dtbo(bn: str = 'dtbo') -> None:
         return
     for dtbo in os.listdir(f"{work}/{bn}/dtbo"):
         if dtbo.startswith("dtbo."):
-            print(lang.text4.format(dtbo))
+            print(lang.decompiling.format(dtbo))
             call(
                 exe=['dtc', '-@', '-I', 'dtb', '-O', 'dts', f'{work}/{bn}/dtbo/{dtbo}', '-o',
                      os.path.join(work, bn, 'dts', 'dts.' + os.path.basename(dtbo).rsplit('.', 1)[1])],
                 out=False)
-    print(lang.text5)
+    print(lang.unpacked_successfully)
     try:
         os.remove(dtboimg)
     except (Exception, BaseException):
@@ -2578,18 +2579,18 @@ def pack_dtbo() -> bool:
     re_folder(f"{work}/dtbo/dtbo")
     for dts in os.listdir(f"{work}/dtbo/dts"):
         if dts.startswith("dts."):
-            print(f"{lang.text6}:{dts}")
+            print(f"{lang.recompiling}:{dts}")
             call(
                 exe=['dtc', '-@', '-I', 'dts', '-O', 'dtb', os.path.join(work, 'dtbo', 'dts', dts), '-o',
                      os.path.join(work, 'dtbo', 'dtbo', 'dtbo.' + os.path.basename(dts).rsplit('.', 1)[1])],
                 out=False)
-    print(f"{lang.text7}:dtbo.img")
+    print(f"{lang.creating_image}:dtbo.img")
     list_ = [os.path.join(work, "dtbo", "dtbo", f) for f in os.listdir(f"{work}/dtbo/dtbo") if
              f.startswith("dtbo.")]
     mkdtboimg.create_dtbo(project_manger.current_work_output_path() + "dtbo.img",
                           sorted(list_, key=lambda x: int(x.rsplit('.')[1])), 4096)
     rmdir(f"{work}/dtbo")
-    print(lang.text8)
+    print(lang.success)
     return True
 
 
@@ -3167,12 +3168,12 @@ class ModuleManager:
                     continue
 
                 arcname = os.path.relpath(item_path_abs, plugin_dir_path)
-                print(f"{lang.text1}:{arcname}")
+                print(f"{lang.writing}:{arcname}")
                 try:
                     resource_zip_file.write(str(item_path_abs), arcname=arcname)
                 except Exception as e:
                     logging.exception(f'Error writing {item_path_abs} to resource zip')
-                    print(lang.text2.format(item_path_abs, e))
+                    print(lang.error_writing_format.format(item_path_abs, e))
 
         resource_zip_content = buffer_resource_zip.getvalue()
         buffer_resource_zip.close()
@@ -3300,7 +3301,7 @@ class ModuleManager:
             self.gavs[set] = StringVar()
             ttk.Label(ft, text=text).pack(side='left', padx=10, pady=10)
             ttk.Entry(ft, textvariable=self.gavs[set]).pack(side='left', padx=5, pady=5)
-            ttk.Button(ft, text=lang.text28,
+            ttk.Button(ft, text=lang.browse,
                        command=lambda: self.gavs[set].set(
                            filedialog.askopenfilename())).pack(side='left', padx=10, pady=10)
 
@@ -3562,13 +3563,13 @@ class ModuleManager:
 
             if self.uninstall_b and self.uninstall_b.winfo_exists():
                 try:
-                    self.uninstall_b.config(text=lang.text29.format(show_name if show_name else name))
+                    self.uninstall_b.config(text=lang.uninstalling_format.format(show_name if show_name else name))
                     if self.winfo_exists(): self.update_idletasks()
                 except tk.TclError:
                     logging.warning(f"TclError updating uninstall_b text for '{name}'. Widget might be destroyed.")
                     pass
 
-            print(lang.text29.format(show_name if show_name else name))
+            print(lang.uninstalling_format.format(show_name if show_name else name))
 
             if os.path.exists(module_path):
                 try:
@@ -3605,10 +3606,10 @@ class ModuleManager:
             elif plugin_successfully_removed_fs:
                 if self.uninstall_b and self.uninstall_b.winfo_exists():
                     try:
-                        self.uninstall_b.config(text=lang.text30.format(show_name if show_name else name))
+                        self.uninstall_b.config(text=lang.uninstallation_complete.format(show_name if show_name else name))
                     except tk.TclError:
                         pass
-                print(lang.text30.format(show_name if show_name else name))
+                print(lang.uninstallation_complete.format(show_name if show_name else name))
                 logging.info(f"Plugin '{name}' (DisplayName: '{show_name}') considered removed from filesystem.")
 
                 if callable(list_pls_plugin):
@@ -3868,7 +3869,7 @@ class MpkMan(ttk.Frame):
 
     def install_mpk_wrapper(self):
         file_path = filedialog.askopenfilename(
-            title=lang.text25,
+            title=lang.select_plugin,
             filetypes=((lang.text26, "*.mpk"),)
         )
         check_mpk_result, reason = module_manager.check_mpk(file_path)
@@ -3883,7 +3884,7 @@ class MpkMan(ttk.Frame):
         header_frame = ttk.Frame(self)
         header_frame.pack(fill=X, padx=0, pady=0)  # Remove extra padding if not needed
 
-        ttk.Label(header_frame, text=lang.text19, font=(None, 20)).pack(padx=10, pady=10, side=LEFT)
+        ttk.Label(header_frame, text=lang.plugin, font=(None, 20)).pack(padx=10, pady=10, side=LEFT)
         ttk.Button(header_frame, text='Mpk Store', command=lambda: create_thread(MpkStore)).pack(side="right", padx=10,
                                                                                                  pady=10)
 
@@ -3910,7 +3911,7 @@ class MpkMan(ttk.Frame):
         # self.pls.bind('<Button-3>', lambda event: rmenu.post(event.x_root, event.y_root)) # On IconGrid (Frame) itself
 
         self.rmenu2 = Menu(self, tearoff=False, borderwidth=0)  # Menu parent is self (MpkMan)
-        self.rmenu2.add_command(label=lang.text20,  # Delete
+        self.rmenu2.add_command(label=lang.uninstall,  # Delete
                                 command=lambda: self._handle_uninstall_plugin(self.chosen.get()))
         self.rmenu2.add_command(label=lang.text22,  # Run
                                 command=lambda: create_thread(module_manager.run, self.chosen.get()))
@@ -3928,7 +3929,7 @@ class InstallMpk(Toplevel):
         self.mconf: ConfigParser = ConfigParser()
         self.installable: bool = True
         self.mpk: str = mpk_path
-        self.title(lang.text31)
+        self.title(lang.plugin_installation)
         # self.resizable(False, False)
         f = Frame(self)
         self.logo = Label(f)
@@ -3944,9 +3945,9 @@ class InstallMpk(Toplevel):
         self.text.pack(padx=10, pady=10)
         self.prog = ttk.Progressbar(self, length=200, mode='indeterminate', orient=HORIZONTAL, maximum=100, value=0)
         self.prog.pack()
-        self.state = Label(self, text=lang.text40, font=(None, 12))
+        self.state = Label(self, text=lang.ready, font=(None, 12))
         self.state.pack(padx=10, pady=10)
-        self.installb = ttk.Button(self, text=lang.text41, style="Accent.TButton",
+        self.installb = ttk.Button(self, text=lang.install, style="Accent.TButton",
                                    command=lambda: create_thread(self.install))
         self.installb.pack(padx=10, pady=10, expand=True, fill=X)
         self.load()
@@ -3967,11 +3968,11 @@ class InstallMpk(Toplevel):
             self.state['text'] = lang.warn15.format(platform.system())
         elif ret == module_error_codes.DependsMissing:
             self.state['text'] = lang.text36 % (self.mconf.get('module', 'name'), reason, reason)
-            self.installb['text'] = lang.text37
+            self.installb['text'] = lang.retry
             self.installb.config(state='normal')
         elif ret == module_error_codes.IsBroken:
             self.state['text'] = lang.warn2
-            self.installb['text'] = lang.text37
+            self.installb['text'] = lang.retry
             self.installb.config(state='normal')
         elif ret == module_error_codes.Normal:
             self.state['text'] = lang.text39
@@ -4392,11 +4393,11 @@ class MpkStore(Toplevel):
             if not is_installed:
                 install_button.config(text=lang.text21, state='normal',
                                       style="Accent.TButton")  # Install button active.
-                uninstall_button.config(text=lang.text20, state='disabled', style="")  # Uninstall button inactive.
+                uninstall_button.config(text=lang.uninstall, state='disabled', style="")  # Uninstall button inactive.
             else:
                 install_button.config(text=getattr(lang, 'plugin_installed_button', lang.text21), state='disabled',
                                       style="")  # Install button inactive (already installed).
-                uninstall_button.config(text=lang.text20, state='normal',
+                uninstall_button.config(text=lang.uninstall, state='normal',
                                         style="Accent.TButton")  # Uninstall button active.
         else:
             logging.debug(
@@ -4578,7 +4579,7 @@ class MpkStore(Toplevel):
                             width=MIN_BUTTON_WIDTH_CHARS)
             bu.pack(side=TOP, fill=X, pady=(0, 3))
             # Uninstall button.
-            uninstall_button = ttk.Button(buttons_frame, text=lang.text20,
+            uninstall_button = ttk.Button(buttons_frame, text=lang.uninstall,
                                           command=lambda current_id=plugin_id: create_thread(self.uninstall,
                                                                                              current_id),
                                           width=MIN_BUTTON_WIDTH_CHARS)
@@ -4611,11 +4612,11 @@ class MpkStore(Toplevel):
 
             if not is_installed_after_attempt:
                 install_button.config(text=lang.text21, style="Accent.TButton", state='normal')
-                uninstall_button.config(text=lang.text20, style="", state='disabled')
+                uninstall_button.config(text=lang.uninstall, style="", state='disabled')
             else:
                 install_button.config(text=getattr(lang, 'plugin_installed_button', lang.text21), style="",
                                       state='disabled')
-                uninstall_button.config(text=lang.text20, style="Accent.TButton", state='normal')
+                uninstall_button.config(text=lang.uninstall, style="Accent.TButton", state='normal')
 
     def clear(self):
 
@@ -4697,7 +4698,7 @@ class MpkStore(Toplevel):
             if self.control[id_] and len(self.control[id_]) == 2:
                 install_button, uninstall_button = self.control[id_]
                 if install_button and install_button.winfo_exists():
-                    install_button.config(state='disabled', text=lang.text40)
+                    install_button.config(state='disabled', text=lang.ready)
             else:
                 logging.error(f"MpkStore.download: Control entry for plugin '{id_}' is malformed.")
         else:
@@ -4892,10 +4893,10 @@ class MpkStore(Toplevel):
                     if is_installed_final:
                         install_button_final.config(text=getattr(lang, 'plugin_installed_button', lang.text21),
                                                     state='disabled', style="")
-                        uninstall_button_final.config(text=lang.text20, state='normal', style="Accent.TButton")
+                        uninstall_button_final.config(text=lang.uninstall, state='normal', style="Accent.TButton")
                     else:
                         install_button_final.config(text=lang.text21, state='normal', style="Accent.TButton")
-                        uninstall_button_final.config(text=lang.text20, state='disabled', style="")
+                        uninstall_button_final.config(text=lang.uninstall, state='disabled', style="")
 
             if id_ in self.tasks:
                 try:
@@ -5207,6 +5208,7 @@ class PackSuper(Toplevel):
         self.delete_source_file = BooleanVar(value=False)
         self.block_device_name = StringVar(value='super')
         self.selected = []
+        self.metadata_slot_count = 2
         (lf1 := ttk.LabelFrame(self, text=lang.text54)).pack(fill=BOTH)
         (lf1_r := ttk.LabelFrame(self, text=lang.attribute)).pack(fill=BOTH)
         (lf2 := ttk.LabelFrame(self, text=lang.settings)).pack(fill=BOTH)
@@ -5243,7 +5245,7 @@ class PackSuper(Toplevel):
                         style="Switch.TCheckbutton").pack(
             padx=10, pady=10, fill=BOTH)
         t_frame = Frame(self)
-        ttk.Checkbutton(t_frame, text=lang.t11, variable=self.delete_source_file, onvalue=True, offvalue=False,
+        ttk.Checkbutton(t_frame, text=lang.remove_original_file, variable=self.delete_source_file, onvalue=True, offvalue=False,
                         style="Switch.TCheckbutton").pack(side=LEFT,
                                                           padx=10, pady=10, fill=BOTH)
         ttk.Button(t_frame, text=lang.refresh, command=self.refresh).pack(side=RIGHT, padx=10, pady=10)
@@ -5278,7 +5280,7 @@ class PackSuper(Toplevel):
         if not project_manger.exist():
             warn_win(text=lang.warn1)
             return False
-        pack_super(sparse=self.is_sparse.get(), group_name=self.group_name.get(), size=self.super_size.get(),
+        pack_super(sparse=self.is_sparse.get(), group_name=self.group_name.get(), size=self.super_size.get(), slot_count=self.metadata_slot_count,
                    super_type=self.super_type.get(),
                    part_list=lbs, del_=sc,
                    attrib=self.attrib.get(), block_device_name=self.block_device_name.get())
@@ -5340,23 +5342,43 @@ class PackSuper(Toplevel):
             except (Exception, BaseException, AttributeError):
                 logging.exception('PackSupper:read_parts_info')
             else:
+                # get metadata_slot_count
+                if isinstance(data.get('metadata_slot_count'), int):
+                    slot_count = data.get('metadata_slot_count', self.metadata_slot_count)
+                    self.metadata_slot_count = slot_count
                 # get block device name
                 for i in data.get('block_devices', []):
                     self.block_device_name.set(i.get('name', 'super'))
                     if isinstance(i.get('size'), int):
                         self.super_size.set(i.get('size', self.super_size.get()))
 
+                hasA = False
+                hasB = False
+                hasBExtents = False
                 for i in data.get('group_table', []):
                     name = i.get('name')
                     if isinstance(name, str) and name != 'default':
                         self.group_name.set(name)
+                        if name.endswith('_a'):
+                            hasA = True
+                        elif name.endswith('_b'):
+                            hasB = True
 
                 selected = []
                 for i in data.get('partition_table', []):
                     name = i.get('name')
                     if isinstance(name, str) and name not in selected:
                         selected.append(name)
+                        if name.endswith('_b'):
+                            extents = i.get('extents', [])
+                            if extents:
+                                hasBExtents = True
                 self.selected = selected
+
+                if hasA and hasB and hasBExtents:
+                    self.super_type.set(3)
+                elif hasA and hasB:
+                    self.super_type.set(2)
 
         # Read dynamic_partitions_op_list
         list_file = f"{self.work}/dynamic_partitions_op_list"
@@ -5389,7 +5411,7 @@ class PackSuper(Toplevel):
 
 
 @animation
-def pack_super(sparse: bool, group_name: str, size: int, super_type, part_list: list, del_: bool = False, return_cmd=0,
+def pack_super(sparse: bool, group_name: str, size: int, slot_count: int, super_type, part_list: list, del_: bool = False, return_cmd=0,
                attrib='readonly',
                output_dir: str = None, work: str = None, block_device_name: str = 'None'):
     if not block_device_name:
@@ -5411,14 +5433,16 @@ def pack_super(sparse: bool, group_name: str, size: int, super_type, part_list: 
                 os.rename(f'{work}/{part}_a.img', f'{work}/{part}.img')
             except:
                 logging.exception('Bugs')
-    command = ['lpmake', '--metadata-size', '65536', '-super-name', block_device_name, '-metadata-slots']
-    if super_type == 1:
-        command += ['2', '-device', f'{block_device_name}:{size}', "--group", f"{group_name}:{size}"]
+    command = ['lpmake', '--metadata-size', '65536', '--super-name', block_device_name, '--metadata-slots']
+    if super_type == 1: # A-only
+        # command += ['2', '--device', f'{block_device_name}:{size}', "--group", f"{group_name}:{size}"]
+        command += [f'{slot_count}', '--device', f'{block_device_name}:{size}', "--group", f"{group_name}:{size}"]
         for part in part_list:
             command += ['--partition', f"{part}:{attrib}:{os.path.getsize(f'{work}/{part}.img')}:{group_name}",
                         '--image', f'{part}={work}/{part}.img']
     else:
-        command += ["3", '-device', f'super:{size}', '--group', f"{group_name}_a:{size}"]
+        # command += ["3", '--device', f'super:{size}', '--group', f"{group_name}_a:{size}"]
+        command += [f'{slot_count}', '--device', f'super:{size}', '--group', f"{group_name}_a:{size}"]
         for part in part_list:
             command += ['--partition',
                         f"{part}_a:{attrib}:{os.path.getsize(f'{work}/{part}.img')}:{group_name}_a",
@@ -5431,11 +5455,11 @@ def pack_super(sparse: bool, group_name: str, size: int, super_type, part_list: 
                 command += ['--partition',
                             f"{part}_b:{attrib}:{os.path.getsize(f'{work}/{part}_b.img')}:{group_name}_b",
                             '--image', f'{part}_b={work}/{part}_b.img']
-        if super_type == 2:
+        if super_type == 2: # Virtual A/B
             command += ["--virtual-ab"]
     if sparse: command += ["--sparse"]
     output_super_path = f'{output_dir}/super.img'
-    command += ['--out', output_super_path]
+    command += ['--output', output_super_path]
     if return_cmd == 1:
         return command
     if call(command) == 0:
@@ -5743,10 +5767,11 @@ class PackPartition(Toplevel):
         self.format = StringVar(value='raw')
         self.erofs_compress_format = StringVar(value='lz4hc')
         self.scale = IntVar(value=0)
+        self.context_patch = IntVar()
         self.UTC = IntVar(value=int(time.time()))
         self.scale_erofs = IntVar()
         self.remove_source_files = IntVar()
-        self.ext4_method = StringVar(value=lang.t32)
+        self.ext4_method = StringVar(value=lang.auto_size)
 
         self.origin_fs = StringVar(value='ext')
         self.modify_fs = StringVar(value='ext')
@@ -5759,74 +5784,113 @@ class PackPartition(Toplevel):
             return
         super().__init__()
 
-        self.title(lang.text42)
-        lf1 = ttk.LabelFrame(self, text=lang.text43)
-        lf1.pack(fill=BOTH, padx=5, pady=5)
-        lf2 = ttk.LabelFrame(self, text=lang.text44)
-        lf2.pack(fill=BOTH, padx=5, pady=5)
-        lf3 = ttk.LabelFrame(self, text=lang.text45)
-        lf3.pack(fill=BOTH, padx=5, pady=5)
-        lf4 = ttk.LabelFrame(self, text=lang.text46)
-        lf4.pack(fill=BOTH, pady=5, padx=5)
-        (sf1 := Frame(lf3)).pack(fill=X, padx=5, pady=5, side=TOP)
+        self.title(lang.pack_options)
+        lf_ext4_setting = ttk.LabelFrame(self, text=lang.ext4_setting)
+        lf_ext4_setting.pack(fill=BOTH, padx=5, pady=5)
+        lf_erofs_setting = ttk.LabelFrame(self, text=lang.erofs_setting)
+        lf_erofs_setting.pack(fill=BOTH, padx=5, pady=5)
+        lf_additional_settings = ttk.LabelFrame(self, text=lang.additional_settings)
+        lf_additional_settings.pack(fill=BOTH, padx=5, pady=5)
+        lf_pack_partition = ttk.LabelFrame(self, text=lang.pack_partition)
+        lf_pack_partition.pack(fill=BOTH, pady=5, padx=5)
+        (sf_additional_setting := Frame(lf_additional_settings)).pack(fill=X, padx=5, pady=5, side=TOP)
         # EXT4 Settings
-        Label(lf1, text=lang.text48).pack(side='left', padx=5, pady=5)
-        ttk.Combobox(lf1, state="readonly", values=("make_ext4fs", "mke2fs+e2fsdroid"),
+        Label(lf_ext4_setting, text=lang.pack_with).pack(side='left', padx=5, pady=5)
+        ttk.Combobox(lf_ext4_setting, state="readonly", values=("make_ext4fs", "mke2fs+e2fsdroid"),
                      textvariable=self.ext4_packer).pack(
             side='left', padx=5, pady=5)
-        Label(lf1, text=lang.t31).pack(side='left', padx=5, pady=5)
-        ttk.Combobox(lf1, state="readonly", values=(lang.t32, lang.t33), textvariable=self.ext4_method).pack(
+        Label(lf_ext4_setting, text=lang.pack_size).pack(side='left', padx=5, pady=5)
+        ttk.Combobox(lf_ext4_setting, state="readonly", values=(lang.auto_size, lang.original_size), textvariable=self.ext4_method).pack(
             side='left', padx=5, pady=5)
-        self.modify_size_button = ttk.Button(lf1, text=lang.t37, command=self.modify_custom_size)
+        self.modify_size_button = ttk.Button(lf_ext4_setting, text=lang.modify_size, command=self.modify_custom_size)
         self.modify_size_button.pack(
             side='left', padx=5, pady=5)
-        self.show_modify_size = lambda: self.modify_size_button.pack_forget() if self.ext4_method.get() == lang.t32 else self.modify_size_button.pack(
+        self.show_modify_size = lambda: self.modify_size_button.pack_forget() if self.ext4_method.get() == lang.auto_size else self.modify_size_button.pack(
             side='left', padx=5, pady=5)
         self.ext4_method.trace('w', lambda *x: self.show_modify_size())
         create_thread(self.show_modify_size)
-        #
-        Label(lf3, text=lang.text49).pack(side='left', padx=5, pady=5)
-        ttk.Combobox(lf3, state="readonly", textvariable=self.format, values=("raw", "sparse", "br", "dat")).pack(
+        # # selinux上下文修补
+        # f_selinux_context = Frame(lf_additional_settings)
+        # ttk.Checkbutton(f_selinux_context, text=f'{lang.context_patch}(有新增文件请勾选)', variable=self.context_patch, onvalue=1, offvalue=0,
+        #                 style="Switch.TCheckbutton").pack(padx=5, pady=5, fill=X, side=LEFT)
+        # f_selinux_context.pack(side='top', padx=5, pady=5)
+        # # 打包格式
+        # Label(lf_additional_settings, text=lang.output_format).pack(side='left', padx=5, pady=5)
+        # ttk.Combobox(lf_additional_settings, state="readonly", textvariable=self.format, values=("raw", "sparse", "br", "dat")).pack(
+        #     padx=5,
+        #     pady=5,
+        #     side='left')
+        # 压缩算法
+        Label(lf_erofs_setting, text=lang.compression_algorithm).pack(side='left', padx=5, pady=5)
+        ttk.Combobox(lf_erofs_setting, state="readonly", textvariable=self.erofs_compress_format,
+                     values=("lz4", "lz4hc", "lzma", "deflate", "zstd")).pack(side='left', padx=5, pady=5)
+        # 支持旧内核
+        ttk.Checkbutton(lf_erofs_setting, text=lang.t35, variable=self.erofs_old_kernel, onvalue=True, offvalue=False,
+                        style="Switch.TCheckbutton").pack(
+            padx=5, pady=5, fill=BOTH)
+        # erofs 等级
+        scales_erofs = ttk.Scale(lf_erofs_setting, from_=0, to=9, orient="horizontal",
+                                 command=lambda x: self.label_e.config(text=lang.t30.format(int(float(x)))),
+                                 variable=self.scale_erofs)
+        self.label_e = tk.Label(lf_erofs_setting, text=lang.t30.format(int(scales_erofs.get())))
+        self.label_e.pack(side='left', padx=5, pady=5)
+        scales_erofs.pack(fill="x", padx=5, pady=5)
+        # Brotli 等级
+        scales = ttk.Scale(sf_additional_setting, from_=0, to=9, orient="horizontal",
+                           command=lambda x: self.label.config(text=lang.level_fromat.format(int(float(x))) % "Brotli"),
+                           variable=self.scale)
+        self.label = ttk.Label(sf_additional_setting, text=lang.level_fromat.format(int(scales.get())) % "Brotli")
+        self.label.pack(side='left', padx=5, pady=5)
+        scales.pack(fill="x", padx=5, pady=5)
+        # selinux上下文修补
+        settings.set_value('tmp_context_patch', '0')    # 每次重置
+        tmp_context_patch = StringVar(value=settings.tmp_context_patch)
+        def enable_tmp_context_patch():
+            if tmp_context_patch.get() == '1':
+                if not ask_win(
+                        lang.warn18, is_top=True):
+                    tmp_context_patch.set('0')
+                    enable_cp.configure(state='off')
+            settings.set_value('tmp_context_patch', tmp_context_patch.get())
+
+        tmp_context_patch.trace("w", lambda *x: enable_tmp_context_patch())
+        f_selinux_context = Frame(lf_additional_settings)
+        enable_cp = ttk.Checkbutton(f_selinux_context, text=f'{lang.context_patch}(有新增文件请勾选)', variable=tmp_context_patch, onvalue='1',
+                                    offvalue='0',
+                                    style="Toggle.TCheckbutton")
+        enable_cp.pack(padx=10, pady=10, fill=X)
+        # enable_cp = ttk.Checkbutton(f_selinux_context, text=f'{lang.context_patch}(有新增文件请勾选)', variable=self.context_patch, onvalue=1, offvalue=0,
+        #                 style="Switch.TCheckbutton").pack(padx=5, pady=5, side=LEFT)
+        f_selinux_context.pack(side='left', padx=5, pady=5)
+        f_selinux_context.pack(side='top')
+        # 打包格式
+        Label(lf_additional_settings, text=lang.output_format).pack(side='left', padx=5, pady=5)
+        ttk.Combobox(lf_additional_settings, state="readonly", textvariable=self.format, values=("raw", "sparse", "br", "dat")).pack(
             padx=5,
             pady=5,
             side='left')
-        Label(lf2, text=lang.text50).pack(side='left', padx=5, pady=5)
-        ttk.Combobox(lf2, state="readonly", textvariable=self.erofs_compress_format,
-                     values=("lz4", "lz4hc", "lzma", "deflate", "zstd")).pack(side='left', padx=5, pady=5)
-        ttk.Checkbutton(lf2, text=lang.t35, variable=self.erofs_old_kernel, onvalue=True, offvalue=False,
-                        style="Switch.TCheckbutton").pack(
-            padx=5, pady=5, fill=BOTH)
-        # --
-        scales_erofs = ttk.Scale(lf2, from_=0, to=9, orient="horizontal",
-                                 command=lambda x: self.label_e.config(text=lang.t30.format(int(float(x)))),
-                                 variable=self.scale_erofs)
-        self.label_e = tk.Label(lf2, text=lang.t30.format(int(scales_erofs.get())))
-        self.label_e.pack(side='left', padx=5, pady=5)
-        scales_erofs.pack(fill="x", padx=5, pady=5)
-        # --
-        scales = ttk.Scale(sf1, from_=0, to=9, orient="horizontal",
-                           command=lambda x: self.label.config(text=lang.text47.format(int(float(x))) % "Brotli"),
-                           variable=self.scale)
-        self.label = ttk.Label(sf1, text=lang.text47.format(int(scales.get())) % "Brotli")
-        self.label.pack(side='left', padx=5, pady=5)
-        scales.pack(fill="x", padx=5, pady=5)
-        f = Frame(lf3)
-        ttk.Label(f, text='UTC:').pack(side=LEFT, fill=X, padx=5, pady=5)
-        ttk.Entry(f, textvariable=self.UTC).pack(side=LEFT, fill=X, padx=5, pady=5)
-        f.pack(fill=X, padx=5, pady=5)
+        # UTC
+        f_utc = Frame(lf_additional_settings)
+        ttk.Label(f_utc, text='UTC:').pack(side=LEFT, fill=X, padx=5, pady=5)
+        ttk.Entry(f_utc, textvariable=self.UTC).pack(side=LEFT, fill=X, padx=5, pady=5)
+        f_utc.pack(fill=X, padx=5, pady=5)
 
-        frame_t = Frame(lf3)
-        ttk.Checkbutton(frame_t, text=lang.text52, variable=self.spatchvb, onvalue=1, offvalue=0,
+        frame_t = Frame(lf_additional_settings)
+        frame_t.configure(background='#993333')
+        # 处理Vbmeta
+        ttk.Checkbutton(frame_t, text=lang.patch_vbmate, variable=self.spatchvb, onvalue=1, offvalue=0,
                         style="Switch.TCheckbutton").pack(
             padx=5, pady=5, fill=X, side=LEFT)
-        ttk.Checkbutton(frame_t, text=lang.t11, variable=self.remove_source_files, onvalue=1, offvalue=0,
+        # 删除源文件
+        ttk.Checkbutton(frame_t, text=lang.remove_original_file, variable=self.remove_source_files, onvalue=1, offvalue=0,
                         style="Switch.TCheckbutton").pack(
             padx=5, pady=5, fill=X, side=LEFT)
         frame_t.pack(fill=X, padx=5, pady=5, side=BOTTOM)
-        ttk.Checkbutton(lf3, text=lang.fs_converter, variable=self.fs_conver, onvalue=True, offvalue=False,
+        # 文件系统转换
+        ttk.Checkbutton(lf_additional_settings, text=lang.fs_converter, variable=self.fs_conver, onvalue=True, offvalue=False,
                         style="Switch.TCheckbutton").pack(
             padx=5, pady=5, fill=BOTH)
-        fs_conver = ttk.Frame(lf3, width=20)
+        fs_conver = ttk.Frame(lf_additional_settings, width=20)
         ttk.Combobox(fs_conver, textvariable=self.origin_fs, values=('ext', 'f2fs', 'erofs'), width=6,
                      state='readonly').pack(
             padx=2, pady=2, fill=X, side=LEFT)
@@ -5837,10 +5901,12 @@ class PackPartition(Toplevel):
         self.fs_conver.trace('w', lambda *z: fs_conver.pack_forget() if not self.fs_conver.get() else fs_conver.pack(
             padx=5, pady=5, fill=X))
 
+        # 取消
         ttk.Button(self, text=lang.cancel, command=self.destroy).pack(side='left', padx=2,
                                                                       pady=2,
                                                                       fill=X,
                                                                       expand=True)
+        # 打包
         ttk.Button(self, text=lang.pack, command=lambda: create_thread(self.start_), style="Accent.TButton").pack(
             side='left',
             padx=2, pady=2,
@@ -5886,7 +5952,7 @@ class PackPartition(Toplevel):
                 if self.custom_size.get(dname, ''):
                     continue
                 ext4_size_value = 0
-                if self.ext4_method.get() == lang.t33:
+                if self.ext4_method.get() == lang.original_size:
                     if os.path.exists(f"{work}/dynamic_partitions_op_list"):
                         with open(f"{work}/dynamic_partitions_op_list", 'r', encoding='utf-8') as t:
                             for _i_ in t.readlines():
@@ -5907,7 +5973,7 @@ class PackPartition(Toplevel):
 
         ck = Toplevel()
         load()
-        ck.title(lang.t37)
+        ck.title(lang.modify_size)
         f1 = Frame(ck)
         f1.pack(pady=5, padx=5, fill=X)
         h = ttk.Combobox(f1, values=list(self.custom_size.keys()), state='readonly')
@@ -5951,7 +6017,7 @@ class PackPartition(Toplevel):
                 utils.remove_duplicate(f"{work}/config/{dname}_fs_config")
                 contexts_file = f"{work}/config/{dname}_file_contexts"
                 if os.path.exists(contexts_file):
-                    if settings.contextpatch == "1":
+                    if settings.contextpatch == "1" or settings.tmp_context_patch == "1":
                         contextpatch.main(work + dname, contexts_file, context_rule_file)
                         new_rules = contextpatch.scan_context(contexts_file)
                         rules = JsonEdit(context_rule_file)
@@ -5969,7 +6035,7 @@ class PackPartition(Toplevel):
                     else:
                         if self.remove_source_files.get() == 1:
                             rdi(work, dname)
-                        print(lang.text3.format(dname))
+                        print(lang.packed_successfully.format(dname))
                         if self.format.get() in ["dat", "br", "sparse"]:
                             img2simg(project_manger.current_work_output_path() + dname + ".img")
                             if self.format.get() == 'dat':
@@ -5979,7 +6045,7 @@ class PackPartition(Toplevel):
                                 datbr(project_manger.current_work_output_path(), dname, self.scale.get(),
                                       int(parts_dict.get('dat_ver', 4)))
                             else:
-                                print(lang.text3.format(dname))
+                                print(lang.packed_successfully.format(dname))
                 elif parts_dict[dname] == 'f2fs':
                     if make_f2fs(dname, work=work, work_output=project_manger.current_work_output_path(),
                                  UTC=self.UTC.get()) != 0:
@@ -5987,7 +6053,7 @@ class PackPartition(Toplevel):
                     else:
                         if self.remove_source_files.get() == 1:
                             rdi(work, dname)
-                        print(lang.text3.format(dname))
+                        print(lang.packed_successfully.format(dname))
                         if self.format.get() in ["dat", "br", "sparse"]:
                             img2simg(project_manger.current_work_output_path() + dname + ".img")
                             if self.format.get() == 'dat':
@@ -5997,11 +6063,11 @@ class PackPartition(Toplevel):
                                 datbr(project_manger.current_work_output_path(), dname, self.scale.get(),
                                       int(parts_dict.get('dat_ver', 4)))
                             else:
-                                print(lang.text3.format(dname))
+                                print(lang.packed_successfully.format(dname))
 
                 else:
                     ext4_size_value = self.custom_size.get(dname, 0)
-                    if self.ext4_method.get() == lang.t33 and not self.custom_size.get(dname, ''):
+                    if self.ext4_method.get() == lang.original_size and not self.custom_size.get(dname, ''):
                         list_file = f"{work}/dynamic_partitions_op_list"
                         if os.path.exists(list_file):
                             with open(list_file, 'r', encoding='utf-8') as t:
@@ -6049,7 +6115,7 @@ class PackPartition(Toplevel):
                         datbr(project_manger.current_work_output_path(), dname, self.scale.get(),
                               int(parts_dict.get('dat_ver', '4')))
                     else:
-                        print(lang.text3.format(dname))
+                        print(lang.packed_successfully.format(dname))
             elif parts_dict[i] in ['boot', 'vendor_boot']:
                 repack_boot(i)
             elif parts_dict[i] == 'dtbo':
@@ -6080,7 +6146,7 @@ def rdi(work: str, part_name: str) -> bool:
                     os.remove(path_)
         except Exception:
             logging.exception(lang.text73 % (part_name, 'E'))
-        print(lang.text3.format(part_name))
+        print(lang.packed_successfully.format(part_name))
     else:
         win.message_pop(lang.text75 % part_name, "red")
     return True
@@ -6572,7 +6638,7 @@ def unpack(chose: list | dict, form: str = '') -> bool:
         os.makedirs(f"{work}/config")
     json_.write(parts)
     parts.clear()
-    print(lang.text8)
+    print(lang.success)
     return True
 
 
@@ -6956,13 +7022,13 @@ def pack_zip(input_dir: str = None, output_zip: str = None, silent: bool = False
             file = str(file)
             arch_name = file.replace(input_dir, '')
             if not silent:
-                print(f"{lang.text1}:{arch_name}")
+                print(f"{lang.writing}:{arch_name}")
             try:
                 zip_.write(file, arcname=arch_name)
             except Exception as e:
-                print(lang.text2.format(file, e))
+                print(lang.error_writing_format.format(file, e))
     if os.path.exists(output_zip):
-        print(lang.text3.format(output_zip))
+        print(lang.packed_successfully.format(output_zip))
 
 
 def dndfile(files: list):
@@ -6991,7 +7057,7 @@ def dndfile(files: list):
 
 class ProjectMenuUtils(ttk.LabelFrame):
     def __init__(self):
-        super().__init__(master=win.tab2, text=lang.text12)
+        super().__init__(master=win.tab2, text=lang.project)
         self.combobox: ttk.Combobox
         self.pack(padx=5, pady=5)
 
@@ -7100,7 +7166,7 @@ class Frame3(ttk.LabelFrame):
         functions = [
             (lang.text122, lambda: create_thread(pack_zip)),
             (lang.text123, lambda: create_thread(PackSuper)),
-            (lang.text19, lambda: win.notepad.select(win.tab7)),
+            (lang.plugin, lambda: win.notepad.select(win.tab7)),
             (lang.t13, lambda: create_thread(FormatConversion)),
             # ("打包 Payload", lambda: create_thread(NewPostInstallConfig)),
         ]
@@ -7508,7 +7574,7 @@ class FormatConversion(ttk.LabelFrame):
                             os.remove(f'{work}/{i}')
                         except Exception:
                             logging.exception('Bugs')
-        print(lang.text8)
+        print(lang.success)
 
 
 def init_verify():

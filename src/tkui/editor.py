@@ -38,7 +38,7 @@ class PythonEditor(tk.Frame):
         self.encoding = tk.StringVar(value='utf-8')
         self.encoding.trace('w', lambda *_:self.load())
         f1 = ttk.Frame(self.parent)
-        ttk.Button(f1, text=lang.text17, command=self.parent.destroy).pack(side=tk.LEFT, fill=tk.X, padx=5, pady=5,
+        ttk.Button(f1, text=lang.close, command=self.parent.destroy).pack(side=tk.LEFT, fill=tk.X, padx=5, pady=5,
                                                                            expand=1)
         self.save_b = ttk.Button(f1, text=lang.t54, command=lambda: create_thread(self.save), style="Accent.TButton")
         self.save_b.pack(side=tk.LEFT, fill=tk.X, padx=5, pady=5, expand=1)
